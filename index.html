@@ -3,44 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CharizardTV - Infinite Library</title>
+    <title>CharizardTV Pro</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <header>
         <div class="logo">CHARIZARD<span>TV</span></div>
-        <div class="search-box">
-            <input type="text" id="search" placeholder="Search across 5+ libraries...">
+        <div class="search-trigger" onclick="showPage('search-page')">
+            <i class="fas fa-search"></i>
         </div>
     </header>
 
-    <div class="category-tabs">
-        <button class="tab-btn active" onclick="switchMode('movie')">Movies</button>
-        <button class="tab-btn" onclick="switchMode('tv')">Web Series</button>
-        <button class="tab-btn" onclick="switchMode('anime')">Anime</button>
+    <div id="home-page" class="app-page active">
+        <div class="hero-slider" id="featured-hero"></div>
+        <h2 class="row-title">Trending Movies</h2>
+        <div id="movies-row" class="horizontal-row"></div>
     </div>
 
-    <section id="hero-banner"></section>
+    <div id="series-page" class="app-page">
+        <h2 class="row-title">Popular Web Series</h2>
+        <div id="series-grid" class="vertical-grid"></div>
+    </div>
 
-    <main>
-        <h2 class="shelf-title">Infinite Collection <i class="fas fa-infinite"></i></h2>
-        <div id="movie-grid" class="pro-grid"></div>
-    </main>
+    <div id="anime-page" class="app-page">
+        <h2 class="row-title">Top Anime Collection</h2>
+        <div id="anime-grid" class="vertical-grid"></div>
+    </div>
+
+    <div id="search-page" class="app-page">
+        <div class="search-header">
+            <input type="text" id="main-search" placeholder="Search Marvel, Naruto, etc...">
+            <button onclick="performSearch()">Search</button>
+        </div>
+        <div id="search-results" class="vertical-grid"></div>
+    </div>
+
+    <nav class="bottom-nav">
+        <div class="nav-item active" onclick="showPage('home-page')"><i class="fas fa-home"></i><span>Home</span></div>
+        <div class="nav-item" onclick="showPage('series-page')"><i class="fas fa-tv"></i><span>Series</span></div>
+        <div class="nav-item" onclick="showPage('anime-page')"><i class="fas fa-dragon"></i><span>Anime</span></div>
+    </nav>
 
     <div id="player-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closePlayer()">&times;</span>
-            <div class="video-container">
-                <iframe id="video-player" src="" frameborder="0" allowfullscreen sandbox="allow-forms allow-scripts allow-same-origin"></iframe>
-            </div>
-            <div id="ep-panel" class="ep-panel">
-                <div class="panel-head">
-                    <h3>Episodes List</h3>
-                    <select id="season-selector" onchange="loadEpisodes()"></select>
-                </div>
-                <div id="episodes-grid" class="ep-grid"></div>
-            </div>
+        <div class="modal-body">
+            <span class="close-modal" onclick="closePlayer()">&times;</span>
+            <iframe id="main-video" src="" frameborder="0" allowfullscreen></iframe>
+            <div id="ep-selector"></div>
         </div>
     </div>
 
