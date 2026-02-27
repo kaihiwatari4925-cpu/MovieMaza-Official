@@ -3,21 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MovieMaza Pro</title>
+    <title>CharizardTv - Premium Streaming</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <header>
-        <div class="logo">MOVIE<span>MAZA</span></div>
-        <input type="text" id="search" placeholder="Search movies (e.g. Avatar)...">
+        <div class="logo">CHARIZARD<span>TV</span></div>
+        <div class="search-container">
+            <i class="fas fa-search"></i>
+            <input type="text" id="search" placeholder="Search Marvel, Anime, Series...">
+        </div>
     </header>
 
-    <div id="movie-grid" class="grid"></div>
+    <div class="category-nav">
+        <button class="cat-btn active" onclick="setCategory('movie')">Movie</button>
+        <button class="cat-btn" onclick="setCategory('series')">TV</button>
+        <button class="cat-btn" onclick="setCategory('anime')">Anime</button>
+        <button class="cat-btn" onclick="setCategory('kids')">Kids</button>
+    </div>
+
+    <section id="hero-banner"></section>
+
+    <section class="shelf">
+        <h2 class="shelf-title">Trending Now <i class="fas fa-fire"></i></h2>
+        <div id="movie-grid" class="horizontal-scroll"></div>
+    </section>
 
     <div id="player-modal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <iframe id="video-player" src="" frameborder="0" sandbox="allow-forms allow-scripts allow-same-origin" allowfullscreen></iframe>
+            <div class="player-wrapper">
+                <iframe id="video-player" src="" frameborder="0" allowfullscreen sandbox="allow-forms allow-scripts allow-same-origin"></iframe>
+            </div>
+            <div id="episode-panel">
+                <h3>Episodes</h3>
+                <div id="episode-list" class="episode-grid"></div>
+            </div>
         </div>
     </div>
 
