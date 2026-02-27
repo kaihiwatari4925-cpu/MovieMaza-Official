@@ -1,10 +1,28 @@
-body { background: #080808; color: white; font-family: sans-serif; margin: 0; }
-header { padding: 20px; text-align: center; background: #111; border-bottom: 2px solid #ff9f00; }
-.logo { font-size: 24px; font-weight: bold; }
-.logo span { color: #ff9f00; }
-#search { width: 85%; padding: 12px; margin-top: 10px; border-radius: 5px; border: none; background: #222; color: white; }
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; padding: 15px; }
-.movie-card img { width: 100%; border-radius: 8px; cursor: pointer; }
-.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 100; }
-iframe { width: 100%; height: 100%; }
-.close { position: absolute; top: 10px; right: 20px; font-size: 40px; color: #ff9f00; cursor: pointer; z-index: 101; }
+:root { --netflix-red: #E50914; --dark-bg: #000000; --card-gray: #1a1a1a; }
+body { background: var(--dark-bg); color: #fff; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0; overflow-x: hidden; }
+
+header { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent); position: fixed; width: 100%; z-index: 100; box-sizing: border-box; }
+.logo { font-size: 24px; font-weight: 900; color: var(--netflix-red); }
+.logo span { color: white; }
+.search-container { background: rgba(255,255,255,0.1); padding: 5px 15px; border-radius: 20px; display: flex; align-items: center; }
+#search { background: none; border: none; color: white; padding-left: 10px; outline: none; }
+
+.category-nav { display: flex; gap: 15px; padding: 80px 20px 10px; overflow-x: auto; white-space: nowrap; }
+.cat-btn { background: #333; color: #fff; border: none; padding: 8px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; }
+.cat-btn.active { background: var(--netflix-red); }
+
+/* Banner like Screenshot 1000310391 */
+#hero-banner { height: 400px; background-size: cover; background-position: center; display: flex; align-items: flex-end; padding: 30px; position: relative; }
+#hero-banner::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 50%; background: linear-gradient(to top, var(--dark-bg), transparent); }
+
+/* Horizontal Scroll like Movie Box UI */
+.horizontal-scroll { display: flex; overflow-x: auto; gap: 15px; padding: 10px 0; scrollbar-width: none; }
+.movie-card { min-width: 120px; border-radius: 8px; overflow: hidden; background: var(--card-gray); transition: transform 0.3s; cursor: pointer; }
+.movie-card:hover { transform: scale(1.08); }
+.movie-card img { width: 100%; height: 180px; object-fit: cover; }
+
+/* Episode Selector like Screenshot 1000311396 */
+#episode-panel { padding: 20px; background: #111; border-top: 1px solid #333; }
+.episode-grid { display: flex; gap: 10px; overflow-x: auto; padding: 10px 0; }
+.ep-box { background: #222; padding: 10px 20px; border-radius: 5px; cursor: pointer; border: 1px solid #444; }
+.ep-box:hover { border-color: var(--netflix-red); color: var(--netflix-red); }
