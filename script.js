@@ -1,32 +1,28 @@
-const OMDb_KEY = 'acb551e7'; 
+const OMDb_KEY = 'acb551e7'; // Teri key
 const grid = document.getElementById('movie-grid');
-const banner = document.getElementById('hero-banner');
+let currentMode = 'movie';
 
-async function setCategory(cat) {
+async function setMode(mode) {
+    currentMode = mode;
     document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
     event.target.classList.add('active');
     
-    let query = cat === 'movie' ? 'Action' : cat === 'series' ? 'Game of Thrones' : 'One Piece';
-    fetchMovies(query, cat);
+    let query = mode === 'movie' ? 'Action' : mode === 'series' ? 'Drama' : 'One Piece';
+    loadContent(query);
 }
 
-async function fetchMovies(query, type) {
-    const res = await fetch(`https://www.omdbapi.com/?s=${query}&type=${type === 'anime' ? 'series' : type}&apikey=${OMDb_KEY}`);
+async function loadContent(query) {
+    const res = await fetch(`https://www.omdbapi.com/?s=${query}&type=${currentMode === 'anime' ? 'series' : currentMode}&apikey=${OMDb_KEY}`);
     const data = await res.json();
-    if (data.Search) {
-        // Set Hero Banner using the first result like Screenshot 1000311390
-        banner.style.backgroundImage = `url(${data.Search[0].Poster})`;
-        banner.innerHTML = `<div style="z-index:2"><h1>${data.Search[0].Title}</h1><button class="cat-btn active">Watch Now</button></div>`;
-        display(data.Search);
-    }
+    if(data.Search) display(data.Search);
 }
 
-function display(movies) {
+function display(data) {
     grid.innerHTML = '';
-    movies.forEach(m => {
+    data.forEach(m => {
         const div = document.createElement('div');
         div.className = 'movie-card';
-        div.innerHTML = `<img src="${m.Poster}" alt="${m.Title}">`;
+        div.innerHTML = `<img src="${m.Poster}" alt="${m.Title}"><h3>${m.Title}</h3>`;
         div.onclick = () => openPlayer(m.imdbID, m.Title);
         grid.appendChild(div);
     });
@@ -35,24 +31,33 @@ function display(movies) {
 function openPlayer(id, title) {
     const modal = document.getElementById('player-modal');
     const player = document.getElementById('video-player');
-    const epList = document.getElementById('episode-list');
     
-    // Automatic Movie Link
-    player.src = `https://vidsrc.to/embed/movie/${id}`;
-    
-    // Episode Selector logic for Series/Anime like Screenshot 1000311396
-    epList.innerHTML = '';
-    for(let i=1; i<=10; i++) {
-        const ep = document.createElement('div');
-        ep.className = 'ep-box';
-        ep.innerText = `EP ${i}`;
-        ep.onclick = () => {
-            let link = prompt(`Episode ${i} ka TeraBox link dalo (Nahi toh automatic chalega):`);
-            player.src = link ? link : `https://vidsrc.to/embed/tv/${id}/${i}/1`;
-        };
-        epList.appendChild(ep);
+    if(currentMode === 'movie') {
+        player.src = `https://vidsrc.to/embed/movie/${id}`;
+        document.getElementById('episode-panel').style.display = 'none';
+    } else {
+        // Episode Logic like Screenshot 1000311396
+        player.src = `https://vidsrc.to/embed/tv/${id}/1/1`;
+        setupEpisodes(id);
+        document.getElementById('episode-panel').style.display = 'block';
     }
     modal.style.display = 'block';
+}
+
+function setupEpisodes(id) {
+    const list = document.getElementById('episode-list');
+    list.innerHTML = '';
+    // Manual Episode box generation
+    for(let i=1; i<=12; i++) {
+        const ep = document.createElement('div');
+        ep.className = 'ep-num';
+        ep.innerText = i;
+        ep.onclick = () => {
+            let link = prompt(`Episode ${i} ka TeraBox link dalo (Nahi toh OK dabayein):`);
+            document.getElementById('video-player').src = link ? link : `https://vidsrc.to/embed/tv/${id}/1/${i}`;
+        };
+        list.appendChild(ep);
+    }
 }
 
 document.querySelector('.close').onclick = () => {
@@ -60,4 +65,4 @@ document.querySelector('.close').onclick = () => {
     document.getElementById('video-player').src = '';
 };
 
-window.onload = () => setCategory('movie');
+window.onload = () => setMode('movie');
