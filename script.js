@@ -1,76 +1,59 @@
-const OMDb_KEY = 'acb551e7'; // Library 1
-const TMDB_KEY = '438efd42c0d3c8fcd74eac49eaca8c51'; // Library 2
-const grid = document.getElementById('movie-grid');
-let activeID = '';
+const OMDb_KEY = 'acb551e7'; 
+let currentID = '';
 
-async function switchMode(mode) {
+// 1. Section Switching Logic (No Khichdi)
+function showSection(id) {
+    document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+    document.getElementById(id + '-section').classList.add('active');
+    
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     event.target.classList.add('active');
-    let q = mode === 'movie' ? 'Marvel' : mode === 'tv' ? 'Series' : 'One Piece';
-    loadUniversal(q);
 }
 
-async function loadUniversal(query) {
-    grid.innerHTML = '<p>Fetching from 5+ sources...</p>';
-    // Primary Search from TMDB for better library
-    const res = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${TMDB_KEY}&query=${query}`);
+// 2. Multi-API Loading
+async function loadData(query, type, gridId) {
+    const grid = document.getElementById(gridId);
+    let url = (type === 'anime') ? `https://api.jikan.moe/v4/anime?q=${query}&limit=12` 
+                                : `https://www.omdbapi.com/?s=${query}&type=${type}&apikey=${OMDb_KEY}`;
+
+    const res = await fetch(url);
     const data = await res.json();
+    const items = data.Search || data.data || [];
     
-    if(data.results && data.results.length > 0) {
-        display(data.results);
-        document.getElementById('hero-banner').style.backgroundImage = `url(https://image.tmdb.org/t/p/w500${data.results[0].poster_path})`;
-    } else {
-        // Backup from OMDb if TMDB fails
-        const res2 = await fetch(`https://www.omdbapi.com/?s=${query}&apikey=${OMDb_KEY}`);
-        const data2 = await res2.json();
-        if(data2.Search) displayOMDb(data2.Search);
-    }
-}
-
-function display(results) {
     grid.innerHTML = '';
-    results.forEach(m => {
-        if(!m.poster_path && !m.Poster) return;
+    items.forEach(m => {
         const div = document.createElement('div');
         div.className = 'movie-card';
-        const img = m.poster_path ? `https://image.tmdb.org/t/p/w500${m.poster_path}` : m.Poster;
-        div.innerHTML = `<img src="${img}"><h3>${m.title || m.name || m.Title}</h3>`;
-        div.onclick = () => openPlayer(m.id || m.imdbID, m.media_type === 'tv' || m.Type === 'series');
+        const poster = m.Poster || m.images?.jpg?.image_url;
+        div.innerHTML = `<img src="${poster}">`;
+        div.onclick = () => openPlayer(m.imdbID || m.mal_id, type);
         grid.appendChild(div);
     });
 }
 
-async function openPlayer(id, isTV) {
-    activeID = id;
+function openPlayer(id, type) {
+    currentID = id;
     const player = document.getElementById('video-player');
-    const panel = document.getElementById('ep-panel');
-    
-    if(isTV) {
-        player.src = `https://vidsrc.to/embed/tv/${id}/1/1`;
-        panel.style.display = 'block';
-        setupSeasons(id);
-    } else {
+    if(type === 'movie') {
         player.src = `https://vidsrc.to/embed/movie/${id}`;
-        panel.style.display = 'none';
+        document.getElementById('ep-panel').style.display = 'none';
+    } else {
+        player.src = `https://vidsrc.to/embed/tv/${id}/1/1`;
+        document.getElementById('ep-panel').style.display = 'block';
+        // Auto-generate episode buttons based on type
+        setupEpisodes(id);
     }
     document.getElementById('player-modal').style.display = 'block';
 }
 
-function setupSeasons(id) {
-    const sel = document.getElementById('season-selector');
-    sel.innerHTML = '<option value="1">Season 1</option><option value="2">Season 2</option>';
-    loadEpisodes();
-}
-
-function loadEpisodes() {
-    const grid = document.getElementById('episodes-grid');
-    grid.innerHTML = '';
-    for(let i=1; i<=20; i++) {
-        const d = document.createElement('div');
-        d.className = 'ep-box';
-        d.innerText = i;
-        d.onclick = () => document.getElementById('video-player').src = `https://vidsrc.to/embed/tv/${activeID}/1/${i}`;
-        grid.appendChild(d);
+function setupEpisodes(id) {
+    const list = document.getElementById('ep-list');
+    list.innerHTML = '';
+    for(let i=1; i<=15; i++) {
+        const btn = document.createElement('button');
+        btn.innerText = i;
+        btn.onclick = () => document.getElementById('video-player').src = `https://vidsrc.to/embed/tv/${id}/1/${i}`;
+        list.appendChild(btn);
     }
 }
 
@@ -79,5 +62,8 @@ function closePlayer() {
     document.getElementById('video-player').src = '';
 }
 
-document.getElementById('search').onkeypress = (e) => { if(e.key === 'Enter') loadUniversal(e.target.value); };
-window.onload = () => loadUniversal('Avengers');
+window.onload = () => {
+    loadData('Avengers', 'movie', 'movies-grid');
+    loadData('Viking', 'series', 'series-grid');
+    loadData('Naruto', 'anime', 'anime-grid');
+};
