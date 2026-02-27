@@ -1,44 +1,76 @@
+<script>
 /* ═══════════════════════════════════════════════════════════
    CHARIZARD TV — FINAL BULLETPROOF STREAMING LOGIC
    ═══════════════════════════════════════════════════════════ */
 
-// 1. Fixing the Player Logic (Server 1 Pro & Anti-Ad)
-const servers = {
-    movie: [
-        { name: "Server 1 (Pro)", sub: "HI+EN", url: "https://vidsrc.pro/embed/movie/" }, // Multi-lang
-        { name: "Server 2 (VidSrc)", sub: "EN", url: "https://vidsrc.me/embed/movie?tmdb=" }, // Fast backup
-        { name: "Server 3 (Super)", sub: "Multi", url: "https://superembed.me/movie/" } // Fallback
-    ],
-    tv: [
-        { name: "Server 1 (Pro)", sub: "HI+EN", url: "https://vidsrc.pro/embed/tv/" },
-        { name: "Server 2 (VidSrc)", sub: "EN", url: "https://vidsrc.to/embed/tv/" }
-    ]
-};
+const TMDB_KEY = '438efd42c0d3c8fcd74eac49eaca8c51';
+const OMDB_KEY = 'acb551e7';
 
-// 2. Sandboxed Player to Kill Popup Ads
-function injectPlayer(url) {
-    const playerFrame = document.getElementById('p-iframe');
-    playerFrame.setAttribute('sandbox', 'allow-scripts allow-forms allow-same-origin'); // Permanent Ad-Block
-    playerFrame.src = url;
-}
-
-// 3. Turbo Proxy Logic (3s Timeout)
-async function fetchWithTurboProxy(url) {
+// 1. TURBO PROXY ROTATION (Eliminates "Loading..." hang)
+async function fetchTurbo(url) {
     const proxies = [
         "https://api.allorigins.win/raw?url=", //
         "https://corsproxy.io/?",
         "https://api.proxyscrape.com/v2/?request="
     ];
-    
     for (let proxy of proxies) {
         try {
-            const response = await fetch(proxy + encodeURIComponent(url), { signal: AbortSignal.timeout(3000) });
-            if (response.ok) return await response.json();
-        } catch (e) {
-            console.warn("Switching Proxy...");
-        }
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 3500); // 3.5s Timeout
+            const res = await fetch(proxy + encodeURIComponent(url), { signal: controller.signal });
+            clearTimeout(timeout);
+            if (res.ok) return await res.json();
+        } catch (e) { console.warn("Proxy Fail, switching..."); }
     }
     throw new Error("All proxies failed");
 }
 
-/* 4. TMDb Key: 438efd42c0d3c8fcd74eac49eaca8c51 */
+// 2. STREAMING SERVERS (Ad-Free & Multi-Language)
+const servers = {
+    movie: [
+        { name: "Server 1 (Pro)", sub: "HI+EN", url: "https://vidsrc.pro/embed/movie/" },
+        { name: "Server 2 (VidSrc)", sub: "EN", url: "https://vidsrc.me/embed/movie?tmdb=" },
+        { name: "Server 3 (Super)", sub: "Multi", url: "https://superembed.me/movie/" }
+    ],
+    tv: [
+        { name: "Server 1 (Pro)", sub: "HI+EN", url: "https://vidsrc.pro/embed/tv/" },
+        { name: "Server 2 (VidSrc)", sub: "EN", url: "https://vidsrc.to/embed/tv/" }
+    ],
+    anime: [
+        { name: "Anime (Sub/Dub)", sub: "JP+EN", url: "https://vidsrc.me/embed/anime/" }
+    ]
+};
+
+// 3. SANDBOXED PLAYER (Permanently blocks popup ads)
+function playVideo(id, type, s = 1, e = 1) {
+    const player = document.getElementById('p-iframe');
+    const serverUrl = type === 'movie' ? servers.movie[0].url + id : servers.tv[0].url + id + `/${s}/${e}`;
+    
+    // Add Sandbox to stop redirects
+    player.setAttribute('sandbox', 'allow-scripts allow-forms allow-same-origin allow-presentation');
+    player.src = serverUrl;
+    document.querySelector('.player').classList.add('open');
+}
+
+// 4. SMART SEARCH (No infinite loops)
+async function searchAnything(query) {
+    if(!query) return;
+    const grid = document.getElementById('search-grid');
+    grid.innerHTML = '<div class="spin"></div> Searching...';
+    try {
+        const data = await fetchTurbo(`https://api.themoviedb.org/3/search/multi?api_key=${TMDB_KEY}&query=${query}`);
+        renderCards(grid, data.results);
+    } catch (e) {
+        grid.innerHTML = '<p class="empty-state">Failed to load results. Try 1.1.1.1 DNS.</p>';
+    }
+}
+
+// Initial Load
+window.onload = () => {
+    // Fetch Trending and Anime logic here...
+    console.log("CharizardTV Ready - Pokemon Blue Theme Active");
+};
+</script>
+
+</body>
+</html>
