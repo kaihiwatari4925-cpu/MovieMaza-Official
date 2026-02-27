@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CharizardTV - Premium Streaming</title>
+    <title>CharizardTV - Infinite Library</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -11,47 +11,35 @@
     <header>
         <div class="logo">CHARIZARD<span>TV</span></div>
         <div class="search-box">
-            <i class="fas fa-search"></i>
-            <input type="text" id="search" placeholder="Search Marvel, Anime, Web Series...">
+            <input type="text" id="search" placeholder="Search across 5+ libraries...">
         </div>
     </header>
 
-    <div class="tabs">
-        <button class="tab-btn active" onclick="setCategory('movie', 'Trending')">Movies</button>
-        <button class="tab-btn" onclick="setCategory('series', 'Series')">TV Shows</button>
-        <button class="tab-btn" onclick="setCategory('series', 'Naruto')">Anime</button>
+    <div class="category-tabs">
+        <button class="tab-btn active" onclick="switchMode('movie')">Movies</button>
+        <button class="tab-btn" onclick="switchMode('tv')">Web Series</button>
+        <button class="tab-btn" onclick="switchMode('anime')">Anime</button>
     </div>
 
-    <div id="hero-banner"></div>
+    <section id="hero-banner"></section>
 
-    <div class="shelf">
-        <h2 class="title">Trending Now 🔥</h2>
-        <div id="trending-grid" class="scroll-list"></div>
-    </div>
-
-    <div class="shelf">
-        <h2 class="title">Featured Indian Stars ⭐</h2>
-        <div id="stars-grid" class="scroll-list">
-            <div class="star-card"><img src="https://image.tmdb.org/t/p/w200/6o79vVg9YAn719pUOf6897N9Ato.jpg"><p>Salman Khan</p></div>
-            <div class="star-card"><img src="https://image.tmdb.org/t/p/w200/n676TfC8p3f6YIqEwP7fH24x4oF.jpg"><p>Akshay Kumar</p></div>
-            <div class="star-card"><img src="https://image.tmdb.org/t/p/w200/869mCCuINBzRzU4fsJu7U3p3jfs.jpg"><p>SRK</p></div>
-            <div class="star-card"><img src="https://image.tmdb.org/t/p/w200/9k99W1v1zVdJ8fQyXbL7Z0mR6kH.jpg"><p>Hrithik</p></div>
-        </div>
-    </div>
+    <main>
+        <h2 class="shelf-title">Infinite Collection <i class="fas fa-infinite"></i></h2>
+        <div id="movie-grid" class="pro-grid"></div>
+    </main>
 
     <div id="player-modal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closePlayer()">&times;</span>
             <div class="video-container">
-                <iframe id="video-player" src="" frameborder="0" allowfullscreen></iframe>
+                <iframe id="video-player" src="" frameborder="0" allowfullscreen sandbox="allow-forms allow-scripts allow-same-origin"></iframe>
             </div>
-            <div id="media-info">
-                <h2 id="media-title">Title</h2>
-                <div class="control-row">
-                    <select id="season-select" onchange="loadEpisodes()"></select>
-                    <span class="badge">Hindi/Dual Audio Support</span>
+            <div id="ep-panel" class="ep-panel">
+                <div class="panel-head">
+                    <h3>Episodes List</h3>
+                    <select id="season-selector" onchange="loadEpisodes()"></select>
                 </div>
-                <div id="ep-grid" class="ep-grid"></div>
+                <div id="episodes-grid" class="ep-grid"></div>
             </div>
         </div>
     </div>
