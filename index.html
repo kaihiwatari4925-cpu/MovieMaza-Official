@@ -1,55 +1,518 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CharizardTV Pro</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CharizardTV 🔥</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+<style>
+  :root {
+    --red: #e50914;
+    --red-dark: #b20710;
+    --bg: #0a0a0a;
+    --bg2: #141414;
+    --bg3: #1f1f1f;
+    --text: #fff;
+    --text-dim: #aaa;
+    --card-w: 150px;
+    --card-h: 220px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 80px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px; height: 60px;
+    background: linear-gradient(to bottom, rgba(0,0,0,.95) 0%, transparent 100%);
+    transition: background .3s;
+  }
+  header.solid { background: rgba(10,10,10,.98); box-shadow: 0 2px 20px rgba(0,0,0,.5); }
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem; color: var(--red); letter-spacing: 2px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .logo span { color: #fff; }
+  .header-actions { display: flex; align-items: center; gap: 16px; }
+  .search-bar {
+    display: flex; align-items: center;
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15);
+    border-radius: 6px; overflow: hidden; transition: all .3s;
+  }
+  .search-bar:focus-within { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.4); }
+  .search-bar input {
+    background: none; border: none; outline: none; color: #fff;
+    font-family: 'Nunito', sans-serif; font-size: .9rem;
+    padding: 8px 12px; width: 200px;
+  }
+  .search-bar input::placeholder { color: var(--text-dim); }
+  .search-bar button {
+    background: none; border: none; color: var(--text-dim);
+    padding: 8px 12px; cursor: pointer; transition: color .2s;
+  }
+  .search-bar button:hover { color: #fff; }
+
+  /* ── PAGES ── */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative; height: 70vh; min-height: 400px;
+    display: flex; align-items: flex-end;
+    background: linear-gradient(135deg, #1a0000 0%, #0a0a0a 60%);
+    overflow: hidden; margin-bottom: 30px;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background-size: cover; background-position: center top;
+    filter: brightness(.45);
+    transition: opacity .6s;
+  }
+  .hero-gradient {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(10,10,10,1) 0%, transparent 50%),
+                linear-gradient(to right, rgba(10,10,10,.9) 0%, transparent 60%);
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    padding: 0 24px 40px; max-width: 600px;
+  }
+  .hero-badge {
+    display: inline-block; background: var(--red);
+    font-size: .7rem; font-weight: 900; letter-spacing: 2px;
+    padding: 3px 10px; border-radius: 3px; margin-bottom: 12px; text-transform: uppercase;
+  }
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 8vw, 4.5rem); line-height: 1; margin-bottom: 12px;
+    text-shadow: 2px 2px 20px rgba(0,0,0,.8);
+  }
+  .hero-meta { color: var(--text-dim); font-size: .85rem; margin-bottom: 12px; }
+  .hero-desc {
+    font-size: .9rem; color: #ccc; line-height: 1.5;
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 24px; border-radius: 6px; font-family: 'Nunito', sans-serif;
+    font-weight: 700; font-size: .9rem; cursor: pointer; border: none; transition: all .2s;
+  }
+  .btn-primary { background: var(--red); color: #fff; }
+  .btn-primary:hover { background: var(--red-dark); transform: scale(1.03); }
+  .btn-secondary { background: rgba(255,255,255,.15); color: #fff; border: 1px solid rgba(255,255,255,.3); }
+  .btn-secondary:hover { background: rgba(255,255,255,.25); }
+
+  /* ── SHELVES ── */
+  .shelf { margin-bottom: 36px; }
+  .shelf-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px 12px;
+  }
+  .shelf-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem; letter-spacing: 1px; color: #fff;
+  }
+  .shelf-title span { color: var(--red); }
+  .shelf-row {
+    display: flex; gap: 12px; overflow-x: auto;
+    padding: 4px 20px 12px; scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .shelf-row::-webkit-scrollbar { display: none; }
+
+  /* ── CARDS ── */
+  .card {
+    flex: 0 0 var(--card-w); height: var(--card-h);
+    border-radius: 8px; overflow: hidden; cursor: pointer;
+    scroll-snap-align: start; position: relative;
+    background: var(--bg3);
+    transition: transform .25s, box-shadow .25s;
+  }
+  .card:hover { transform: scale(1.07); box-shadow: 0 8px 30px rgba(229,9,20,.35); z-index: 2; }
+  .card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .card-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,.9) 0%, transparent 55%);
+    opacity: 0; transition: opacity .25s;
+    display: flex; align-items: flex-end; padding: 10px;
+  }
+  .card:hover .card-overlay { opacity: 1; }
+  .card-name { font-size: .75rem; font-weight: 700; line-height: 1.2; }
+  .card-year { font-size: .7rem; color: var(--text-dim); }
+  .card-placeholder {
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 10px; text-align: center; gap: 8px;
+    background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+  }
+  .card-placeholder i { font-size: 2rem; color: var(--red); opacity: .6; }
+  .card-placeholder span { font-size: .7rem; color: var(--text-dim); }
+
+  /* ── BOTTOM NAV ── */
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+    display: flex; background: rgba(10,10,10,.97);
+    border-top: 1px solid rgba(255,255,255,.08);
+    backdrop-filter: blur(10px);
+  }
+  .nav-item {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; padding: 10px 0; cursor: pointer;
+    color: var(--text-dim); font-size: .7rem; font-weight: 600;
+    transition: color .2s; gap: 4px; border: none; background: none;
+  }
+  .nav-item i { font-size: 1.3rem; transition: all .2s; }
+  .nav-item.active, .nav-item:hover { color: var(--red); }
+  .nav-item.active i { transform: scale(1.1); }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 200;
+    background: rgba(0,0,0,.85); backdrop-filter: blur(4px);
+    overflow-y: auto;
+  }
+  .modal-overlay.open { display: block; }
+  .modal {
+    background: var(--bg2); border-radius: 14px; margin: 20px auto;
+    max-width: 760px; width: 95%; overflow: hidden; position: relative;
+    box-shadow: 0 20px 60px rgba(0,0,0,.8);
+    animation: modalIn .3s cubic-bezier(.34,1.56,.64,1);
+  }
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(.92) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  .modal-hero {
+    height: 280px; background-size: cover; background-position: center;
+    position: relative;
+  }
+  .modal-hero-grad {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, var(--bg2) 0%, transparent 50%);
+  }
+  .modal-close {
+    position: absolute; top: 14px; right: 14px;
+    background: rgba(0,0,0,.7); border: 1px solid rgba(255,255,255,.2);
+    color: #fff; width: 36px; height: 36px; border-radius: 50%;
+    font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: background .2s;
+  }
+  .modal-close:hover { background: var(--red); border-color: var(--red); }
+  .modal-body { padding: 0 24px 24px; }
+  .modal-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem; line-height: 1; margin-bottom: 8px;
+  }
+  .modal-meta { color: var(--text-dim); font-size: .8rem; margin-bottom: 12px; display: flex; gap: 12px; flex-wrap: wrap; }
+  .modal-meta span { display: flex; align-items: center; gap: 4px; }
+  .modal-desc { font-size: .88rem; color: #ccc; line-height: 1.6; margin-bottom: 20px; }
+  .modal-actions { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+  .modal-stream-btn {
+    padding: 12px 28px; background: var(--red); color: #fff;
+    border: none; border-radius: 8px; font-family: 'Nunito', sans-serif;
+    font-weight: 700; font-size: 1rem; cursor: pointer;
+    display: flex; align-items: center; gap: 8px; transition: all .2s;
+  }
+  .modal-stream-btn:hover { background: var(--red-dark); transform: scale(1.03); }
+
+  /* ── SEASON/EPISODE ── */
+  .episodes-section { border-top: 1px solid rgba(255,255,255,.08); padding-top: 20px; }
+  .ep-controls {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;
+  }
+  .ep-controls label { font-weight: 700; font-size: .9rem; }
+  select {
+    background: var(--bg3); color: #fff; border: 1px solid rgba(255,255,255,.15);
+    border-radius: 6px; padding: 8px 12px; font-family: 'Nunito', sans-serif;
+    font-size: .85rem; cursor: pointer; outline: none;
+  }
+  select:focus { border-color: var(--red); }
+  .ep-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); gap: 8px;
+  }
+  .ep-btn {
+    background: var(--bg3); border: 1px solid rgba(255,255,255,.1);
+    color: var(--text-dim); border-radius: 6px; padding: 8px 4px;
+    font-family: 'Nunito', sans-serif; font-size: .8rem; font-weight: 700;
+    cursor: pointer; text-align: center; transition: all .2s;
+  }
+  .ep-btn:hover, .ep-btn.active { background: var(--red); color: #fff; border-color: var(--red); }
+
+  /* ── IFRAME PLAYER ── */
+  .player-wrap {
+    display: none; position: fixed; inset: 0; z-index: 300;
+    background: #000; flex-direction: column;
+  }
+  .player-wrap.open { display: flex; }
+  .player-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 16px; background: rgba(0,0,0,.9); flex-shrink: 0;
+  }
+  .player-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; }
+  .player-close {
+    background: var(--red); border: none; color: #fff;
+    padding: 6px 16px; border-radius: 6px; font-family: 'Nunito', sans-serif;
+    font-weight: 700; cursor: pointer;
+  }
+  .player-iframe { flex: 1; border: none; width: 100%; }
+
+  /* ── SEARCH PAGE ── */
+  .search-page-header {
+    padding: 80px 20px 20px;
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem;
+  }
+  .search-page-header span { color: var(--red); }
+  .search-results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 16px; padding: 0 20px 20px;
+  }
+  .search-results-grid .card { flex: none; width: 100%; height: 210px; }
+
+  /* ── LOADING ── */
+  .loading {
+    display: flex; align-items: center; justify-content: center;
+    height: 200px; color: var(--text-dim); gap: 10px; font-size: .95rem;
+  }
+  .spinner {
+    width: 28px; height: 28px; border: 3px solid rgba(229,9,20,.2);
+    border-top-color: var(--red); border-radius: 50%;
+    animation: spin .7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── EMPTY STATE ── */
+  .empty {
+    text-align: center; padding: 60px 20px; color: var(--text-dim);
+  }
+  .empty i { font-size: 3rem; color: var(--red); opacity: .4; margin-bottom: 16px; display: block; }
+
+  /* ── PAGE TOP PAD ── */
+  #page-home .hero { margin-top: 0; }
+  #page-movies .shelf, #page-series .shelf, #page-anime .shelf { padding-top: 80px; }
+
+  @media (min-width: 600px) {
+    :root { --card-w: 170px; --card-h: 255px; }
+    .search-bar input { width: 260px; }
+  }
+  @media (min-width: 900px) {
+    :root { --card-w: 190px; --card-h: 280px; }
+    .hero { height: 80vh; }
+  }
+</style>
 </head>
 <body>
-    <header>
-        <div class="logo">CHARIZARD<span>TV</span></div>
-        <div class="search-box">
-            <input type="text" id="search" placeholder="Search Marvel, Naruto, etc...">
-            <button onclick="smartSearch()"><i class="fas fa-search"></i></button>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="logo">🔥<span>Charizard</span>TV</div>
+  <div class="header-actions">
+    <div class="search-bar">
+      <input type="text" id="search-input" placeholder="Search anything..." />
+      <button onclick="doSearch()"><i class="fas fa-search"></i></button>
+    </div>
+  </div>
+</header>
+
+<!-- PAGES -->
+<div id="page-home" class="page active">
+  <div class="hero" id="hero-home">
+    <div class="hero-bg" id="hero-bg"></div>
+    <div class="hero-gradient"></div>
+    <div class="hero-content">
+      <div class="hero-badge" id="hero-badge">Trending</div>
+      <div class="hero-title" id="hero-title">Loading...</div>
+      <div class="hero-meta" id="hero-meta"></div>
+      <div class="hero-desc" id="hero-desc"></div>
+      <div class="hero-actions">
+        <button class="btn btn-primary" id="hero-play-btn"><i class="fas fa-play"></i> Play Now</button>
+        <button class="btn btn-secondary" id="hero-info-btn"><i class="fas fa-info-circle"></i> More Info</button>
+      </div>
+    </div>
+  </div>
+  <div class="shelf">
+    <div class="shelf-header"><div class="shelf-title">🔥 <span>Trending</span> Movies</div></div>
+    <div class="shelf-row" id="shelf-trending"></div>
+  </div>
+  <div class="shelf">
+    <div class="shelf-header"><div class="shelf-title">⭐ <span>Top Rated</span> Movies</div></div>
+    <div class="shelf-row" id="shelf-top-rated"></div>
+  </div>
+  <div class="shelf">
+    <div class="shelf-header"><div class="shelf-title">🎌 <span>Top</span> Anime</div></div>
+    <div class="shelf-row" id="shelf-home-anime"></div>
+  </div>
+  <div class="shelf">
+    <div class="shelf-header"><div class="shelf-title">📺 <span>Popular</span> Series</div></div>
+    <div class="shelf-row" id="shelf-home-series"></div>
+  </div>
+</div>
+
+<div id="page-movies" class="page">
+  <div class="shelf">
+    <div class="shelf-header"><div class="shelf-title">🎬 <span>New</span> Releases</div></div>
+    <div class="shelf-row" id="shelf-movies-new"></div>
+  </div>
+  <div class="shelf">
+    <div class="shelf-header"><div class="shelf-title">🏆 <span>Award</span> Winners</div></div>
+    <div class="shelf-row" id="shelf-movies-award"></div>
+  </div>
+  <div class="shelf">
+    <div class="shelf-header"><div class="shelf-title">💥 <span>Action</span> Hits</div></div>
+    <div class="shelf-row" id="shelf-movies-action"></div>
+  </div>
+  <div class="shelf">
+    <div class="shelf-header"><div class="shelf-title">😂 <span>Comedy</span> & Fun</div></div>
+    <div class="shelf-row" id="shelf-movies-comedy"></div>
+  </div>
+</div>
+
+<div id="page-series" class="page">
+  <div class="shelf">
+    <div class="shelf-header"><div class="shelf-title">📺 <span>Popular</span> Right Now</div></div>
+    <div class="shelf-row" id="shelf-series-popular"></div>
+  </div>
+  <div class="shelf">
+    <div class="shelf-header"><div class="shelf-title">⚡ <span>Drama</span> Series</div></div>
+    <div class="shelf-row" id="shelf-series-drama"></div>
+  </div>
+  <div class="shelf">
+    <div class="shelf-header"><div class="shelf-title">🔍 <span>Crime</span> & Thriller</div></div>
+    <div class="shelf-row" id="shelf-series-crime"></div>
+  </div>
+</div>
+
+<div id="page-anime" class="page">
+  <div class="shelf">
+    <div class="shelf-header"><div class="shelf-title">🎌 <span>Top</span> Airing</div></div>
+    <div class="shelf-row" id="shelf-anime-airing"></div>
+  </div>
+  <div class="shelf">
+    <div class="shelf-header"><div class="shelf-title">🔥 <span>All-Time</span> Favourites</div></div>
+    <div class="shelf-row" id="shelf-anime-top"></div>
+  </div>
+  <div class="shelf">
+    <div class="shelf-header"><div class="shelf-title">💫 <span>Movies</span> & OVAs</div></div>
+    <div class="shelf-row" id="shelf-anime-movies"></div>
+  </div>
+</div>
+
+<div id="page-search" class="page">
+  <div class="search-page-header">Results for: <span id="search-query-label"></span></div>
+  <div id="search-results-all"></div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="nav-item active" onclick="showPage('home', this)">
+    <i class="fas fa-home"></i><span>Home</span>
+  </button>
+  <button class="nav-item" onclick="showPage('movies', this)">
+    <i class="fas fa-film"></i><span>Movies</span>
+  </button>
+  <button class="nav-item" onclick="showPage('series', this)">
+    <i class="fas fa-tv"></i><span>Series</span>
+  </button>
+  <button class="nav-item" onclick="showPage('anime', this)">
+    <i class="fas fa-dragon"></i><span>Anime</span>
+  </button>
+</nav>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal" id="modal">
+    <div class="modal-hero" id="modal-hero">
+      <div class="modal-hero-grad"></div>
+      <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-title" id="modal-title"></div>
+      <div class="modal-meta" id="modal-meta"></div>
+      <div class="modal-desc" id="modal-desc"></div>
+      <div class="modal-actions">
+        <button class="modal-stream-btn" id="modal-stream-btn">
+          <i class="fas fa-play"></i> Stream Now
+        </button>
+      </div>
+      <div class="episodes-section" id="episodes-section" style="display:none">
+        <div class="ep-controls">
+          <label>Season:</label>
+          <select id="season-select" onchange="loadEpisodes()"></select>
         </div>
-    </header>
-
-    <div class="tabs">
-        <button class="tab-btn active" onclick="showSection('movies')">Movies</button>
-        <button class="tab-btn" onclick="showSection('series')">Web Series</button>
-        <button class="tab-btn" onclick="showSection('anime')">Anime</button>
+        <div class="ep-grid" id="ep-grid"></div>
+      </div>
     </div>
+  </div>
+</div>
 
-    <div id="hero-banner"></div>
+<!-- PLAYER -->
+<div class="player-wrap" id="player-wrap">
+  <div class="player-header">
+    <div class="player-title" id="player-title">CharizardTV 🔥</div>
+    <button class="player-close" onclick="closePlayer()"><i class="fas fa-times"></i> Close</button>
+  </div>
+  <iframe class="player-iframe" id="player-iframe" allowfullscreen allow="autoplay; fullscreen"></iframe>
+</div>
 
-    <div id="movies-section" class="content-section active">
-        <h2 class="title">Trending Movies</h2>
-        <div id="movies-grid" class="horizontal-scroll"></div>
-    </div>
+<script>
+// ─────────────────────────────────────
+// CONFIG
+// ─────────────────────────────────────
+const OMDB_KEY = 'trilogy'; // public demo key — user should replace with own key from omdbapi.com
+const OMDB = q => `https://www.omdbapi.com/?apikey=${OMDB_KEY}&${q}`;
+const TVMAZE = p => `https://api.tvmaze.com${p}`;
+const JIKAN = p => `https://api.jikan.moe/v4${p}`;
+const VIDSRC_MOVIE = id => `https://vidsrc.to/embed/movie/${id}`;
+const VIDSRC_TV = (id,s,e) => `https://vidsrc.to/embed/tv/${id}/${s}/${e}`;
+const POSTER_PLACEHOLDER = (title) => null;
 
-    <div id="series-section" class="content-section">
-        <h2 class="title">Popular TV Shows</h2>
-        <div id="series-grid" class="horizontal-scroll"></div>
-    </div>
+let currentItem = null;
 
-    <div id="anime-section" class="content-section">
-        <h2 class="title">Latest Anime</h2>
-        <div id="anime-grid" class="horizontal-scroll"></div>
-    </div>
+// ─────────────────────────────────────
+// UTILS
+// ─────────────────────────────────────
+async function fetchJSON(url) {
+  try {
+    const r = await fetch(url);
+    if (!r.ok) throw new Error(r.status);
+    return await r.json();
+  } catch(e) { return null; }
+}
 
-    <div id="player-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closePlayer()">&times;</span>
-            <iframe id="video-player" src="" frameborder="0" allowfullscreen></iframe>
-            <div id="ep-panel">
-                <h3>Select Episode</h3>
-                <div id="ep-list" class="ep-grid"></div>
-            </div>
-        </div>
-    </div>
+function loading() {
+  return `<div class="loading"><div class="spinner"></div> Loading...</div>`;
+}
 
-    <script src="script.js"></script>
-</body>
-</html>
+function makeCard(item) {
+  const { title, year, poster, type, id, imdbId, tvmazeId, malId } = item;
+  const hasImg = poster && poster !== 'N/A';
+  const inner = hasImg
+    ? `<img src="${poster}" alt="${title}" loading="lazy" onerror="this.parentNode.innerHTML=noImgHtml('${escHtml(title)}','${type||''}')"/>`
+    : `<div class="card-placeholder"><i class="fas ${typeIcon(type)}"></i><span>${escHtml(title)}</span></div>`;
+  return `
+    <div class="card" onclick='openModal(${JSON.stringify(item).replace(/'/g,"&#39;")})'>
+      ${inner}
+      <div class="card-overlay">
+        <div><div class="card-name">${escHtml(title)}</div><div class="card-year">${year||''}</div></div>
+      </div>
+    </div>`;
+}
+
+function noImgHtml(title, type) {
+  return `<div class="card-placeholder"><i class="fas ${typeIcon(type)}"></i><span>${title}</span></div>`;
+}
+
+f
