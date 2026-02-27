@@ -468,51 +468,48 @@
 </div>
 
 <script>
-// ─────────────────────────────────────
-// CONFIG
-// ─────────────────────────────────────
-const OMDB_KEY = 'trilogy'; // public demo key — user should replace with own key from omdbapi.com
-const OMDB = q => `https://www.omdbapi.com/?apikey=${OMDB_KEY}&${q}`;
+// ═══════════════════════════════════════════════════════════════
+//  CharizardTV — FINAL PROFESSIONAL FIX
+//  TMDB via corsproxy.io (India bypass) + Jikan v4 + OMDb
+//  All fetch calls wrapped in try/catch with retry + timeout
+// ═══════════════════════════════════════════════════════════════
+
+// ── API KEYS ───────────────────────────────────────────────────
+const TMDB_KEY = '438efd42c0d3c8fcd74eac49eaca8c51';
+const OMDB_KEY = 'acb551e7';
+
+// ── PROXY: India mein TMDB block bypass ───────────────────────
+//    corsproxy.io works without Cloudflare DNS changes
+const PROXY     = 'https://corsproxy.io/?';
+const TMDB_BASE = 'https://api.themoviedb.org/3';
+const IMG_BASE  = 'https://image.tmdb.org/t/p/w500';
+const IMG_ORIG  = 'https://image.tmdb.org/t/p/original';
+
+// Build proxied TMDB URL — MANDATORY for India
+function T(path, extra = '') {
+  const raw = `${TMDB_BASE}${path}?api_key=${TMDB_KEY}&language=en-US${extra}`;
+  return `${PROXY}${encodeURIComponent(raw)}`;
+}
+
+// OMDb API (fallback enrichment, no proxy needed)
+const OMDB   = q => `https://www.omdbapi.com/?apikey=${OMDB_KEY}&${q}`;
+
+// TVmaze — no key, no block, no proxy needed
 const TVMAZE = p => `https://api.tvmaze.com${p}`;
-const JIKAN = p => `https://api.jikan.moe/v4${p}`;
-const VIDSRC_MOVIE = id => `https://vidsrc.to/embed/movie/${id}`;
-const VIDSRC_TV = (id,s,e) => `https://vidsrc.to/embed/tv/${id}/${s}/${e}`;
-const POSTER_PLACEHOLDER = (title) => null;
+
+// Jikan v4 — keyless, India-accessible, no proxy needed
+const JIKAN  = p => `https://api.jikan.moe/v4${p}`;
+
+// VidSrc embed player URLs
+const VIDSRC_MOVIE = id       => `https://vidsrc.to/embed/movie/${id}`;
+const VIDSRC_TV    = (id,s,e) => `https://vidsrc.to/embed/tv/${id}/${s}/${e}`;
 
 let currentItem = null;
 
 // ─────────────────────────────────────
-// UTILS
+// ROBUST fetchJSON — timeout + retry
 // ─────────────────────────────────────
-async function fetchJSON(url) {
-  try {
-    const r = await fetch(url);
-    if (!r.ok) throw new Error(r.status);
-    return await r.json();
-  } catch(e) { return null; }
-}
-
-function loading() {
-  return `<div class="loading"><div class="spinner"></div> Loading...</div>`;
-}
-
-function makeCard(item) {
-  const { title, year, poster, type, id, imdbId, tvmazeId, malId } = item;
-  const hasImg = poster && poster !== 'N/A';
-  const inner = hasImg
-    ? `<img src="${poster}" alt="${title}" loading="lazy" onerror="this.parentNode.innerHTML=noImgHtml('${escHtml(title)}','${type||''}')"/>`
-    : `<div class="card-placeholder"><i class="fas ${typeIcon(type)}"></i><span>${escHtml(title)}</span></div>`;
-  return `
-    <div class="card" onclick='openModal(${JSON.stringify(item).replace(/'/g,"&#39;")})'>
-      ${inner}
-      <div class="card-overlay">
-        <div><div class="card-name">${escHtml(title)}</div><div class="card-year">${year||''}</div></div>
-      </div>
-    </div>`;
-}
-
-function noImgHtml(title, type) {
-  return `<div class="card-placeholder"><i class="fas ${typeIcon(type)}"></i><span>${title}</span></div>`;
-}
-
-f
+async function fetchJSON(url, retries = 2) {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      const controller = new AbortControlle
