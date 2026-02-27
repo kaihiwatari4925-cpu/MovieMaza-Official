@@ -1,50 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CharizardTV - Pro Streaming</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body>
-    <header>
-        <div class="logo">CHARIZARD<span>TV</span></div>
-        <div class="search-wrap">
-            <input type="text" id="search" placeholder="Search Marvel, Anime, Series...">
-            <button id="search-btn"><i class="fas fa-search"></i></button>
-        </div>
-    </header>
+<header>
+    <div class="logo">CHARIZARD<span>TV</span></div>
+    <input type="text" id="search" placeholder="Search Marvel, Anime, Series...">
+</header>
 
-    <div class="category-nav">
-        <button class="cat-btn active" data-type="movie">Movies</button>
-        <button class="cat-btn" data-type="series">TV Shows</button>
-        <button class="cat-btn" data-type="anime">Anime</button>
+<div class="nav-tabs">
+    <button class="tab active" onclick="setCategory('movie', 'Marvel')">Movies</button>
+    <button class="tab" onclick="setCategory('series', 'Stranger Things')">TV Shows</button>
+    <button class="tab" onclick="setCategory('series', 'Naruto')">Anime</button>
+</div>
+
+<section class="shelf">
+    <h2 class="shelf-title">Featured Stars <i class="fas fa-star"></i></h2>
+    <div id="stars-grid" class="horizontal-list">
+        <div class="star-card"><img src="https://www.themoviedb.org/t/p/w235_and_h235_face/6o79vVg9YAn719pUOf6897N9Ato.jpg"><p>Salman Khan</p></div>
+        <div class="star-card"><img src="https://www.themoviedb.org/t/p/w235_and_h235_face/n676TfC8p3f6YIqEwP7fH24x4oF.jpg"><p>Akshay Kumar</p></div>
+        <div class="star-card"><img src="https://www.themoviedb.org/t/p/w235_and_h235_face/869mCCuINBzRzU4fsJu7U3p3jfs.jpg"><p>Shah Rukh Khan</p></div>
     </div>
+</section>
 
-    <section id="hero-banner"></section>
+<section class="shelf">
+    <h2 class="shelf-title">Trending Now</h2>
+    <div id="movie-grid" class="horizontal-list"></div>
+</section>
 
-    <main>
-        <h2 class="section-title">Trending Now <i class="fas fa-fire"></i></h2>
-        <div id="movie-grid" class="horizontal-scroll"></div>
-
-        <h2 class="section-title">New Releases</h2>
-        <div id="new-grid" class="horizontal-scroll"></div>
-    </main>
-
-    <div id="player-modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div class="video-container">
-                <iframe id="video-player" src="" frameborder="0" allowfullscreen sandbox="allow-forms allow-scripts allow-same-origin"></iframe>
+<div id="player-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <iframe id="video-player" src="" frameborder="0" allowfullscreen></iframe>
+        
+        <div id="media-controls">
+            <div class="control-group">
+                <h3>Select Season</h3>
+                <select id="season-select" onchange="loadEpisodes()"></select>
             </div>
-            <div id="ep-panel">
-                <h3>Select Episode</h3>
-                <div id="ep-list" class="ep-grid"></div>
+            <div class="control-group">
+                <h3>Audio: <span id="current-audio">Hindi/Dual</span></h3>
             </div>
+            <div id="ep-list" class="ep-list"></div>
         </div>
     </div>
-
-    <script src="script.js"></script>
-</body>
-</html>
+</div>
