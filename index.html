@@ -1,42 +1,61 @@
-<header>
-    <div class="logo">CHARIZARD<span>TV</span></div>
-    <input type="text" id="search" placeholder="Search Marvel, Anime, Series...">
-</header>
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CharizardTV - Premium Streaming</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo">CHARIZARD<span>TV</span></div>
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="search" placeholder="Search Marvel, Anime, Web Series...">
+        </div>
+    </header>
 
-<div class="nav-tabs">
-    <button class="tab active" onclick="setCategory('movie', 'Marvel')">Movies</button>
-    <button class="tab" onclick="setCategory('series', 'Stranger Things')">TV Shows</button>
-    <button class="tab" onclick="setCategory('series', 'Naruto')">Anime</button>
-</div>
-
-<section class="shelf">
-    <h2 class="shelf-title">Featured Stars <i class="fas fa-star"></i></h2>
-    <div id="stars-grid" class="horizontal-list">
-        <div class="star-card"><img src="https://www.themoviedb.org/t/p/w235_and_h235_face/6o79vVg9YAn719pUOf6897N9Ato.jpg"><p>Salman Khan</p></div>
-        <div class="star-card"><img src="https://www.themoviedb.org/t/p/w235_and_h235_face/n676TfC8p3f6YIqEwP7fH24x4oF.jpg"><p>Akshay Kumar</p></div>
-        <div class="star-card"><img src="https://www.themoviedb.org/t/p/w235_and_h235_face/869mCCuINBzRzU4fsJu7U3p3jfs.jpg"><p>Shah Rukh Khan</p></div>
+    <div class="tabs">
+        <button class="tab-btn active" onclick="setCategory('movie', 'Trending')">Movies</button>
+        <button class="tab-btn" onclick="setCategory('series', 'Series')">TV Shows</button>
+        <button class="tab-btn" onclick="setCategory('series', 'Naruto')">Anime</button>
     </div>
-</section>
 
-<section class="shelf">
-    <h2 class="shelf-title">Trending Now</h2>
-    <div id="movie-grid" class="horizontal-list"></div>
-</section>
+    <div id="hero-banner"></div>
 
-<div id="player-modal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <iframe id="video-player" src="" frameborder="0" allowfullscreen></iframe>
-        
-        <div id="media-controls">
-            <div class="control-group">
-                <h3>Select Season</h3>
-                <select id="season-select" onchange="loadEpisodes()"></select>
-            </div>
-            <div class="control-group">
-                <h3>Audio: <span id="current-audio">Hindi/Dual</span></h3>
-            </div>
-            <div id="ep-list" class="ep-list"></div>
+    <div class="shelf">
+        <h2 class="title">Trending Now 🔥</h2>
+        <div id="trending-grid" class="scroll-list"></div>
+    </div>
+
+    <div class="shelf">
+        <h2 class="title">Featured Indian Stars ⭐</h2>
+        <div id="stars-grid" class="scroll-list">
+            <div class="star-card"><img src="https://image.tmdb.org/t/p/w200/6o79vVg9YAn719pUOf6897N9Ato.jpg"><p>Salman Khan</p></div>
+            <div class="star-card"><img src="https://image.tmdb.org/t/p/w200/n676TfC8p3f6YIqEwP7fH24x4oF.jpg"><p>Akshay Kumar</p></div>
+            <div class="star-card"><img src="https://image.tmdb.org/t/p/w200/869mCCuINBzRzU4fsJu7U3p3jfs.jpg"><p>SRK</p></div>
+            <div class="star-card"><img src="https://image.tmdb.org/t/p/w200/9k99W1v1zVdJ8fQyXbL7Z0mR6kH.jpg"><p>Hrithik</p></div>
         </div>
     </div>
-</div>
+
+    <div id="player-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePlayer()">&times;</span>
+            <div class="video-container">
+                <iframe id="video-player" src="" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div id="media-info">
+                <h2 id="media-title">Title</h2>
+                <div class="control-row">
+                    <select id="season-select" onchange="loadEpisodes()"></select>
+                    <span class="badge">Hindi/Dual Audio Support</span>
+                </div>
+                <div id="ep-grid" class="ep-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
