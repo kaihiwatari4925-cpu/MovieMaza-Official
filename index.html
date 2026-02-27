@@ -3,42 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CharizardTv - Premium Streaming</title>
+    <title>CharizardTv - Stream Movies & Anime</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <header>
         <div class="logo">CHARIZARD<span>TV</span></div>
-        <div class="search-container">
-            <i class="fas fa-search"></i>
+        <div class="search-box">
             <input type="text" id="search" placeholder="Search Marvel, Anime, Series...">
         </div>
     </header>
 
-    <div class="category-nav">
-        <button class="cat-btn active" onclick="setCategory('movie')">Movie</button>
-        <button class="cat-btn" onclick="setCategory('series')">TV</button>
-        <button class="cat-btn" onclick="setCategory('anime')">Anime</button>
-        <button class="cat-btn" onclick="setCategory('kids')">Kids</button>
+    <div class="category-bar">
+        <button class="cat-btn active" onclick="setMode('movie')">Movie</button>
+        <button class="cat-btn" onclick="setMode('series')">TV</button>
+        <button class="cat-btn" onclick="setMode('anime')">Anime</button>
     </div>
 
-    <section id="hero-banner"></section>
+    <section id="hero-section"></section>
 
-    <section class="shelf">
-        <h2 class="shelf-title">Trending Now <i class="fas fa-fire"></i></h2>
-        <div id="movie-grid" class="horizontal-scroll"></div>
-    </section>
+    <h2 class="section-title">Trending Now</h2>
+    <div id="movie-grid" class="grid"></div>
 
     <div id="player-modal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <div class="player-wrapper">
+            <div class="video-container">
                 <iframe id="video-player" src="" frameborder="0" allowfullscreen sandbox="allow-forms allow-scripts allow-same-origin"></iframe>
             </div>
             <div id="episode-panel">
-                <h3>Episodes</h3>
-                <div id="episode-list" class="episode-grid"></div>
+                <div class="panel-header">
+                    <h3>Episodes</h3>
+                    <select id="season-select" onchange="updateEpisodes()"></select>
+                </div>
+                <div id="episode-list" class="ep-grid"></div>
             </div>
         </div>
     </div>
