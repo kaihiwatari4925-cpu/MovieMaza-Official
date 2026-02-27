@@ -10,46 +10,43 @@
 <body>
     <header>
         <div class="logo">CHARIZARD<span>TV</span></div>
-        <div class="search-trigger" onclick="showPage('search-page')">
-            <i class="fas fa-search"></i>
+        <div class="search-box">
+            <input type="text" id="search" placeholder="Search Marvel, Naruto, etc...">
+            <button onclick="smartSearch()"><i class="fas fa-search"></i></button>
         </div>
     </header>
 
-    <div id="home-page" class="app-page active">
-        <div class="hero-slider" id="featured-hero"></div>
-        <h2 class="row-title">Trending Movies</h2>
-        <div id="movies-row" class="horizontal-row"></div>
+    <div class="tabs">
+        <button class="tab-btn active" onclick="showSection('movies')">Movies</button>
+        <button class="tab-btn" onclick="showSection('series')">Web Series</button>
+        <button class="tab-btn" onclick="showSection('anime')">Anime</button>
     </div>
 
-    <div id="series-page" class="app-page">
-        <h2 class="row-title">Popular Web Series</h2>
-        <div id="series-grid" class="vertical-grid"></div>
+    <div id="hero-banner"></div>
+
+    <div id="movies-section" class="content-section active">
+        <h2 class="title">Trending Movies</h2>
+        <div id="movies-grid" class="horizontal-scroll"></div>
     </div>
 
-    <div id="anime-page" class="app-page">
-        <h2 class="row-title">Top Anime Collection</h2>
-        <div id="anime-grid" class="vertical-grid"></div>
+    <div id="series-section" class="content-section">
+        <h2 class="title">Popular TV Shows</h2>
+        <div id="series-grid" class="horizontal-scroll"></div>
     </div>
 
-    <div id="search-page" class="app-page">
-        <div class="search-header">
-            <input type="text" id="main-search" placeholder="Search Marvel, Naruto, etc...">
-            <button onclick="performSearch()">Search</button>
-        </div>
-        <div id="search-results" class="vertical-grid"></div>
+    <div id="anime-section" class="content-section">
+        <h2 class="title">Latest Anime</h2>
+        <div id="anime-grid" class="horizontal-scroll"></div>
     </div>
-
-    <nav class="bottom-nav">
-        <div class="nav-item active" onclick="showPage('home-page')"><i class="fas fa-home"></i><span>Home</span></div>
-        <div class="nav-item" onclick="showPage('series-page')"><i class="fas fa-tv"></i><span>Series</span></div>
-        <div class="nav-item" onclick="showPage('anime-page')"><i class="fas fa-dragon"></i><span>Anime</span></div>
-    </nav>
 
     <div id="player-modal" class="modal">
-        <div class="modal-body">
-            <span class="close-modal" onclick="closePlayer()">&times;</span>
-            <iframe id="main-video" src="" frameborder="0" allowfullscreen></iframe>
-            <div id="ep-selector"></div>
+        <div class="modal-content">
+            <span class="close" onclick="closePlayer()">&times;</span>
+            <iframe id="video-player" src="" frameborder="0" allowfullscreen></iframe>
+            <div id="ep-panel">
+                <h3>Select Episode</h3>
+                <div id="ep-list" class="ep-grid"></div>
+            </div>
         </div>
     </div>
 
