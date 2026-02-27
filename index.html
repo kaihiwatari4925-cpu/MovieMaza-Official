@@ -487,6 +487,35 @@ body::after {
   .player-header { height:44px; padding:8px 14px; }
   .player-title  { font-size:.85rem; }
 }
+
+/* ── SKELETON SHIMMER CARDS ── */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.skeleton-card {
+  border: 1px solid rgba(29,123,241,.1) !important;
+  pointer-events: none;
+}
+.skel-img {
+  width: 100%; height: 75%;
+  background: linear-gradient(90deg, var(--bg3) 25%, var(--bg4) 50%, var(--bg3) 75%);
+  background-size: 400px 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: 8px 8px 0 0;
+}
+.skel-text {
+  height: 10px; border-radius: 4px; margin: 4px 8px;
+  background: linear-gradient(90deg, var(--bg3) 25%, var(--bg4) 50%, var(--bg3) 75%);
+  background-size: 400px 100%;
+  animation: shimmer 1.4s infinite;
+}
+.skel-sm { width: 50%; }
+
+/* ── LAZY IMAGE FADE-IN ── */
+.lazy-img { opacity: 0; transition: opacity .35s ease; }
+.lazy-img[src] { opacity: 1; }
+
 </style>
 </head>
 <body>
@@ -540,20 +569,3 @@ body::after {
     <div class="hero-gradient"></div>
     <div class="hero-scan"></div>
     <div class="hero-content" id="hero-content">
-      <div class="hero-badge" id="hero-badge"><i class="fas fa-bolt"></i> TRENDING NOW</div>
-      <div class="hero-title" id="hero-title">Loading...</div>
-      <div class="hero-meta" id="hero-meta"></div>
-      <div class="hero-desc" id="hero-desc"></div>
-      <div class="hero-actions">
-        <button class="btn btn-primary" id="hero-play-btn"><i class="fas fa-play"></i> Play Now</button>
-        <button class="btn btn-secondary" id="hero-info-btn"><i class="fas fa-info-circle"></i> Info</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="shelf" style="padding-top:18px">
-    <div class="shelf-header"><div class="shelf-title">⚡ <span>Trending</span> Movies</div></div>
-    <div class="shelf-row" id="shelf-trending"></div>
-  </div>
-  <div class="shelf">
-    <div class="shelf-header"><div class="shelf-title">🏆 
