@@ -1,22 +1,20 @@
-:root { --red: #E50914; --black: #000; --nav-bg: #121212; }
-body { background: var(--black); color: #fff; font-family: 'Arial', sans-serif; margin: 0; padding-bottom: 70px; }
+:root { --red: #E50914; --black: #000; --card: #181818; }
+body { background: var(--black); color: white; font-family: 'Arial', sans-serif; margin: 0; }
 
-/* Header & Pages */
-header { display: flex; justify-content: space-between; padding: 15px 20px; background: rgba(0,0,0,0.9); }
-.logo { font-size: 24px; font-weight: 900; color: var(--red); }
+header { padding: 15px; background: rgba(0,0,0,0.9); position: sticky; top: 0; z-index: 100; border-bottom: 2px solid var(--red); }
+.logo { font-size: 26px; font-weight: 900; color: var(--red); }
 .logo span { color: #fff; }
-.app-page { display: none; padding: 15px; }
-.app-page.active { display: block; }
 
-/* Grid & Rows like Movie Box */
-.horizontal-row { display: flex; overflow-x: auto; gap: 12px; padding-bottom: 10px; scrollbar-width: none; }
-.vertical-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 15px; }
+.search-box { background: #222; margin: 10px 15px; border-radius: 8px; display: flex; padding: 5px; }
+#search { background: none; border: none; color: white; width: 100%; padding: 10px; outline: none; }
 
-.movie-card { min-width: 120px; border-radius: 8px; overflow: hidden; background: #1a1a1a; }
-.movie-card img { width: 100%; height: 170px; object-fit: cover; }
+.tabs { display: flex; gap: 10px; padding: 10px 15px; overflow-x: auto; scrollbar-width: none; }
+.tab-btn { background: #333; border: none; color: white; padding: 8px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; white-space: nowrap; }
+.tab-btn.active { background: var(--red); }
 
-/* Bottom Nav like Screenshot 1000310395 */
-.bottom-nav { position: fixed; bottom: 0; width: 100%; height: 65px; background: var(--nav-bg); display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #333; z-index: 1000; }
-.nav-item { color: #888; text-align: center; font-size: 12px; cursor: pointer; }
-.nav-item.active { color: var(--red); }
-.nav-item i { font-size: 20px; display: block; margin-bottom: 4px; }
+.content-section { display: none; padding: 15px; }
+.content-section.active { display: block; }
+
+.horizontal-scroll { display: flex; gap: 12px; overflow-x: auto; scrollbar-width: none; padding-bottom: 15px; }
+.movie-card { min-width: 130px; border-radius: 8px; overflow: hidden; background: var(--card); transition: 0.3s; }
+.movie-card img { width: 100%; height: 190px; object-fit: cover; }
