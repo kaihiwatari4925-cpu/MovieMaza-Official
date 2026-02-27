@@ -1,20 +1,27 @@
-:root { --red: #E50914; --black: #000; --card: #181818; }
-body { background: var(--black); color: white; font-family: 'Arial', sans-serif; margin: 0; }
+/* Search Bar Polish */
+.search-container {
+    width: 100%;
+    padding: 10px 20px;
+    box-sizing: border-box; /* Isse search bar screen se bahar nahi jayega */
+    display: flex;
+    justify-content: center;
+}
 
-header { padding: 15px; background: rgba(0,0,0,0.9); position: sticky; top: 0; z-index: 100; border-bottom: 2px solid var(--red); }
-.logo { font-size: 26px; font-weight: 900; color: var(--red); }
-.logo span { color: #fff; }
+#main-search {
+    width: 100%;
+    max-width: 600px; /* Desktop par bahut bada na dikhe */
+    padding: 12px 20px;
+    border-radius: 25px;
+    border: none;
+    background: #222;
+    color: white;
+    font-size: 16px;
+    outline: none;
+    border: 1px solid transparent;
+    transition: 0.3s;
+}
 
-.search-box { background: #222; margin: 10px 15px; border-radius: 8px; display: flex; padding: 5px; }
-#search { background: none; border: none; color: white; width: 100%; padding: 10px; outline: none; }
-
-.tabs { display: flex; gap: 10px; padding: 10px 15px; overflow-x: auto; scrollbar-width: none; }
-.tab-btn { background: #333; border: none; color: white; padding: 8px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; white-space: nowrap; }
-.tab-btn.active { background: var(--red); }
-
-.content-section { display: none; padding: 15px; }
-.content-section.active { display: block; }
-
-.horizontal-scroll { display: flex; gap: 12px; overflow-x: auto; scrollbar-width: none; padding-bottom: 15px; }
-.movie-card { min-width: 130px; border-radius: 8px; overflow: hidden; background: var(--card); transition: 0.3s; }
-.movie-card img { width: 100%; height: 190px; object-fit: cover; }
+#main-search:focus {
+    border-color: #E50914; /* Netflix Red border on focus */
+    background: #333;
+}
