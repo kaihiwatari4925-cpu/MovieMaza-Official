@@ -1,30 +1,86 @@
-name: Build Android APK
-on: [push]
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
+name: Build CharizardTV Android APK
 
-      - name: Setup Java
-        uses: actions/setup-java@v3
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+
+jobs:
+  build-android:
+    name: Build Debug APK
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── Step 1: Checkout repository ──────────────────────────────
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # ── Step 2: Set up Java 17 (Temurin) ─────────────────────────
+      - name: Set up Java 17 (Temurin)
+        uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: 'gradle'
 
-      - name: Setup Node
-        uses: actions/setup-node@v3
+      # ── Step 3: Set up Node.js 20 ────────────────────────────────
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
 
-      - name: Install Cordova and Build
+      # ── Step 4: Install project dependencies ─────────────────────
+      - name: Install Node Dependencies
+        run: npm install
+
+      # ── Step 5: Install Cordova globally ─────────────────────────
+      - name: Install Cordova CLI
+        run: npm install -g cordova
+
+      # ── Step 6: Verify Cordova installation ──────────────────────
+      - name: Verify Cordova Version
+        run: cordova --version
+
+      # ── Step 7: Set up Android SDK via environment ───────────────
+      - name: Set up Android SDK Environment
         run: |
-          npm install -g cordova
-          cordova platform add android@12.0.0
-          cordova build android --debug
+          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
+          echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v3
+      # ── Step 8: Accept Android SDK licenses ──────────────────────
+      - name: Accept Android SDK Licenses
+        run: |
+          yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses || true
+
+      # ── Step 9: Add Android platform ─────────────────────────────
+      - name: Add Android Platform
+        run: cordova platform add android
+
+      # ── Step 10: Build Debug APK ──────────────────────────────────
+      - name: Build Debug APK
+        run: cordova build android --debug
+
+      # ── Step 11: Locate the generated APK ────────────────────────
+      - name: Locate APK File
+        run: |
+          echo "Searching for APK files..."
+          find . -name "*.apk" -not -path "*/node_modules/*"
+          APK_PATH=$(find . -name "*.apk" -not -path "*/node_modules/*" | head -n 1)
+          echo "APK_PATH=$APK_PATH" >> $GITHUB_ENV
+          echo "Found APK at: $APK_PATH"
+
+      # ── Step 12: Upload APK as GitHub Artifact ────────────────────
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
         with:
           name: CharizardTV-Final
-          path: platforms/android/app/build/outputs/apk/debug/app-debug.apk
+          path: ${{ env.APK_PATH }}
+          retention-days: 30
+          if-no-files-found: error
