@@ -5,22 +5,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: '20'
-      - name: Build APK
+
+      - name: Install Cordova and Build
         run: |
           npm install -g cordova
-          cordova platform add android
-          cordova build android
+          cordova platform add android@12.0.0
+          cordova build android --debug
+
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
-          name: CharizardTV-Official
+          name: CharizardTV-Final
           path: platforms/android/app/build/outputs/apk/debug/app-debug.apk
